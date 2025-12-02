@@ -15,7 +15,7 @@ main = do
          print $ snd $ foldl' (\(c,tot) rot -> ((c+rot) `mod` 100,tot + hits c rot)) (50,0) rots
          input2 <- readFile "input2.txt"
          let Just ranges = tryParser (parseRange `sepBy` string ",") input2
-         let sillies = concatMap silliesInRange ranges
+         let sillies = concatMap (silliesInRange 2) ranges
          print sillies
          print $ length sillies
          print $ sum sillies
@@ -40,17 +40,17 @@ parseInteger = read <$> munch1 isDigit
 parseRange :: ReadP (Integer,Integer)
 parseRange = (,) <$> parseInteger <*> (char '-' >> parseInteger)
 
-silliesInRange :: (Integer,Integer) -> [Integer]
-silliesInRange (from,to) | (l`mod`2==1) = silliesInRange (intenner l,to)
-                         | otherwise = dropWhile (<from)
-                                     $ takeWhile (<=to)
-                                     $ map (read.(\s -> s++s).show) [h..]
-                                    -- $ [hh,hh+step..]
+silliesInRange :: Int -> (Integer,Integer) -> [Integer]
+silliesInRange times (from,to) | (l`mod`times/=0) = silliesInRange times (intenner l,to)
+                               | otherwise = dropWhile (<from)
+                                           $ takeWhile (<=to)
+                                           $ map (read.concat.(replicate times).show) [h..]
+                                          -- $ [hh,hh+step..]
  where l = length (show from)
-       hs = take (l`div`2) (show from)
+       hs = take (l`div`times) (show from)
        h = read hs :: Integer
        --hh = read (hs++hs)
-       --step = intenner (l`div`2) + 1
+       --step = intenner (l`div`times) + 1
 
 intenner :: Int -> Integer
 intenner i = read ('1':replicate i '0') --10^^l
