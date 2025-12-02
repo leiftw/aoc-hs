@@ -42,7 +42,9 @@ parseRange = (,) <$> parseInteger <*> (char '-' >> parseInteger)
 
 silliesInRange :: (Integer,Integer) -> [Integer]
 silliesInRange (from,to) | (l`mod`2==1) = silliesInRange (read$'1':replicate l '0',to) --10^^l
-                         | otherwise = takeWhile (<=to) $ map (read.(\s -> s++s).show) [h..] --[hh,hh+step..]
+                         | otherwise = dropWhile (<from)
+                                     $ takeWhile (<=to)
+                                     $ map (read.(\s -> s++s).show) [h..] --[hh,hh+step..]
  where l = length (show from)
        hs = take (l`div`2) (show from)
        h = read hs :: Integer
