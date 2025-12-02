@@ -44,11 +44,13 @@ silliesInRange :: (Integer,Integer) -> [Integer]
 silliesInRange (from,to) | (l`mod`2==1) = silliesInRange (intenner l,to)
                          | otherwise = dropWhile (<from)
                                      $ takeWhile (<=to)
-                                     $ map (read.(\s -> s++s).show) [h..] --[hh,hh+step..]
+                                    -- $ map (read.(\s -> s++s).show) [h..]
+                                     $ [hh,hh+step..]
  where l = length (show from)
        hs = take (l`div`2) (show from)
-       h = read hs :: Integer
-       --hh = read (hs++hs)
+       -- h = read hs :: Integer
+       hh = read (hs++hs)
+       step = intenner (l`div`2) + 1
 
 intenner :: Int -> Integer
 intenner i = read ('1':replicate i '0') --10^^l
