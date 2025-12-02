@@ -17,7 +17,6 @@ main = do
          input2 <- readFile "input2.txt"
          let Just ranges = tryParser (parseRange `sepBy` string ",") input2
          let sillies = concatMap (\range -> nub $ concatMap (flip silliesInRange range) [2..10]) ranges
-         print sillies
          print $ length sillies
          print $ sum sillies
 
