@@ -15,7 +15,7 @@ main = do
          print $ snd $ foldl' (\(c,tot) rot -> ((c+rot) `mod` 100,tot + hits c rot)) (50,0) rots
          input2 <- readFile "input2.txt"
          let Just ranges = tryParser (parseRange `sepBy` string ",") input2
-         let sillies = concatMap (silliesInRange 2) ranges
+         let sillies = concatMap (concat . (flip map [2..10]) . flip silliesInRange) ranges
          print sillies
          print $ length sillies
          print $ sum sillies
