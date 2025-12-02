@@ -41,7 +41,7 @@ parseRange :: ReadP (Integer,Integer)
 parseRange = (,) <$> parseInteger <*> (char '-' >> parseInteger)
 
 silliesInRange :: (Integer,Integer) -> [Integer]
-silliesInRange (from,to) | (l`mod`2==1) = silliesInRange (read$'1':replicate l '0',to) --10^^l
+silliesInRange (from,to) | (l`mod`2==1) = silliesInRange (intenner l,to)
                          | otherwise = dropWhile (<from)
                                      $ takeWhile (<=to)
                                      $ map (read.(\s -> s++s).show) [h..] --[hh,hh+step..]
@@ -49,6 +49,9 @@ silliesInRange (from,to) | (l`mod`2==1) = silliesInRange (read$'1':replicate l '
        hs = take (l`div`2) (show from)
        h = read hs :: Integer
        --hh = read (hs++hs)
+
+intenner :: Int -> Integer
+intenner i = read ('1':replicate i '0') --10^^l
 
 -- from `Utils.ReadPMaybe`
 tryParser :: ReadP a -> String -> Maybe a
