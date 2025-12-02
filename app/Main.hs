@@ -5,13 +5,13 @@ import Lib
 main :: IO ()
 main = do
          input1a <- readFile "input1a.txt"
-         let rots = map parse $ words input1a
+         let rots = map parseRot $ words input1a
          print $ length $ filter (==0) $ map (`mod`100) $ accum (+) 50 rots
          print $ snd $ foldl' (\(c,tot) rot -> ((c+rot) `mod` 100,tot + hits c rot)) (50,0) rots
 
-parse :: String -> Int
-parse ('L':r) = 0 - read r
-parse ('R':r) =     read r
+parseRot :: String -> Int
+parseRot ('L':r) = 0 - read r
+parseRot ('R':r) =     read r
 
 -- TODO: unintuitive order, either postpend or `foldr` with initial `reverse`?
 accum :: Foldable fo => (b -> a -> b) -> b -> fo a -> [b]
