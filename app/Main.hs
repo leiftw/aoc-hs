@@ -9,12 +9,12 @@ import Lib
 
 main :: IO ()
 main = do
-         input1a <- readFile "input1a.txt"
-         let rots = map parseRot $ words input1a
+         input1 <- readFile "input1.txt"
+         let rots = map parseRot $ words input1
          print $ length $ filter (==0) $ map (`mod`100) $ accum (+) 50 rots
          print $ snd $ foldl' (\(c,tot) rot -> ((c+rot) `mod` 100,tot + hits c rot)) (50,0) rots
-         input2a <- readFile "input2a.txt"
-         let Just ranges = tryParser (parseRange `sepBy` string ",") input2a
+         input2 <- readFile "input2.txt"
+         let Just ranges = tryParser (parseRange `sepBy` string ",") input2
          let sillies = concatMap silliesInRange ranges
          print sillies
          print $ length sillies
