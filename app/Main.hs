@@ -19,9 +19,9 @@ main = do
          let silliesX = concatMap (\range -> nub $ concatMap (flip silliesInRange range) [2..10]) ranges
          print $ sum sillies2
          print $ sum silliesX
-         input3 <- readFile "input3.txt"
+         input3 <- readFile "input3x.txt"
          let joltages = map (map (\c -> fromEnum c - fromEnum '0')) $ lines input3
-         print $ sum $ map maxJoltage joltages
+         print $ map (maxJoltages 3) joltages
 
 parseRot :: String -> Int
 parseRot ('L':r) = 0 - read r
@@ -61,3 +61,11 @@ maxJoltage' (x,y) (a:b:r) | a > x = maxJoltage' (a,b) (b:r)
 maxJoltage' (x,y) (a:r) | a > y = maxJoltage' (x,a) r
                         | otherwise = maxJoltage' (x,y) r
 maxJoltage' (x,y) [] = (10*x)+y
+
+maxJoltages :: Int -> [Int] -> Integer
+maxJoltages k l = maxJoltages' k (replicate k 0) l
+
+maxJoltages' :: Int -> [Int] -> [Int] -> Integer
+maxJoltages' k js l@(a:r) = maxJoltages' k (take k $ safes ++ takeWhile (>=a) unsafes ++ l) r
+ where (safes,unsafes) = splitAt (k - length l) js
+maxJoltages' _ js [] = sum $ zipWith (\i j -> toInteger j * intenner i) [0..] $ reverse js
