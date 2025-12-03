@@ -18,6 +18,9 @@ main = do
          let sillies = concatMap (\range -> nub $ concatMap (flip silliesInRange range) [2..10]) ranges
          print $ length sillies
          print $ sum sillies
+         input3 <- readFile "input3.txt"
+         let joltages = map (map (\c -> fromEnum c - fromEnum '0')) $ lines input3
+         print $ sum $ map maxJoltage joltages
 
 parseRot :: String -> Int
 parseRot ('L':r) = 0 - read r
@@ -46,3 +49,14 @@ silliesInRange times (from,to) | (l`mod`times/=0) = silliesInRange times (intenn
        h = read hs :: Integer
        --hh = read (hs++hs)
        --step = intenner (l`div`times) + 1
+
+maxJoltage :: [Int] -> Int
+maxJoltage (a:b:r) = maxJoltage' (a,b) r
+
+maxJoltage' :: (Int,Int) -> [Int] -> Int
+maxJoltage' (x,y) (a:b:r) | a > x = maxJoltage' (a,b) r
+                          | a > y = maxJoltage' (x,a) (b:r)
+                          | otherwise = maxJoltage' (x,y) (b:r)
+maxJoltage' (x,y) (a:r) | a > y = maxJoltage' (x,a) r
+                        | otherwise = maxJoltage' (x,y) r
+maxJoltage' (x,y) [] = (10*x)+y
