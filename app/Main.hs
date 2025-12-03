@@ -15,9 +15,10 @@ main = do
          print $ snd $ foldl' (\(c,tot) rot -> ((c+rot) `mod` 100,tot + hits c rot)) (50,0) rots
          input2 <- readFile "input2.txt"
          let Just ranges = tryParser (parseRange `sepBy` string ",") input2
-         let sillies = concatMap (\range -> nub $ concatMap (flip silliesInRange range) [2..10]) ranges
-         print $ length sillies
-         print $ sum sillies
+         let sillies2 = concatMap (silliesInRange 2) ranges
+         let silliesX = concatMap (\range -> nub $ concatMap (flip silliesInRange range) [2..10]) ranges
+         print $ sum sillies2
+         print $ sum silliesX
          input3 <- readFile "input3.txt"
          let joltages = map (map (\c -> fromEnum c - fromEnum '0')) $ lines input3
          print $ sum $ map maxJoltage joltages
