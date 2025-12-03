@@ -54,7 +54,7 @@ maxJoltage :: [Int] -> Int
 maxJoltage (a:b:r) = maxJoltage' (a,b) r
 
 maxJoltage' :: (Int,Int) -> [Int] -> Int
-maxJoltage' (x,y) (a:b:r) | a > x = maxJoltage' (a,b) r
+maxJoltage' (x,y) (a:b:r) | a > x = maxJoltage' (a,b) (b:r)
                           | a > y = maxJoltage' (x,a) (b:r)
                           | otherwise = maxJoltage' (x,y) (b:r)
 maxJoltage' (x,y) (a:r) | a > y = maxJoltage' (x,a) r
