@@ -9,7 +9,7 @@ accum :: Foldable fo => (b -> a -> b) -> b -> fo a -> [b]
 accum f i as = snd $ foldl' (\(c,ras) a -> (f c a,(f c a):ras)) (i,[]) as
 
 intenner :: Int -> Integer
-intenner i = read ('1':replicate i '0') --10^^l
+intenner i = read ('1':replicate i '0') -- `10^^l` is a `Fractional`
 
 -- from `Utils.ReadPMaybe`
 tryParser :: ReadP a -> String -> Maybe a
