@@ -51,7 +51,7 @@ silliesInRange times (from,to) | (l`mod`times/=0) = silliesInRange times (intenn
        --step = intenner (l`div`times) + 1
 
 maxJoltage :: [Int] -> Int
-maxJoltage (a:b:r) = maxJoltage' (a,b) r
+maxJoltage l = maxJoltage' (0,0) l
 
 maxJoltage' :: (Int,Int) -> [Int] -> Int
 maxJoltage' (x,y) (a:b:r) | a > x = maxJoltage' (a,b) (b:r)
