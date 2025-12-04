@@ -56,8 +56,9 @@ silliesInRange times (from,to) | (l`mod`times/=0) = silliesInRange times (intenn
                                            $ map (read.concat.(replicate times).show) [h..]
                                           -- $ [hh,hh+step..]
                                           -- increment the repeated part from the beginning of `from`
- where l = length (show from)
-       hs = take (l`div`times) (show from) -- the beginning of `from`, which repeated is a lower bound
+ where fs = show from
+       l = length fs
+       hs = take (l`div`times) fs -- the beginning of `from`, which repeated is a lower bound
        h = read hs :: Integer
        -- ALT: this saves many `read`s and `show`s,
        --       but finds false positives when ranges go over different digit lengths
