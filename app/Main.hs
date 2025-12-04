@@ -49,16 +49,16 @@ parseRange :: ReadP (Integer,Integer)
 parseRange = (,) <$> parseInteger <*> (char '-' >> parseInteger)
 
 silliesInRange :: Int -> (Integer,Integer) -> [Integer]
-silliesInRange times (min,max) | (l`mod`times/=0) = silliesInRange times (intenner l,max)
+silliesInRange times (from,to) | (l`mod`times/=0) = silliesInRange times (intenner l,to)
                                  -- digit length does not fit, go to the start of the next length
-                               | otherwise = dropWhile (<min) -- repeat beginning may lower `min`
-                                           $ takeWhile (<=max)
+                               | otherwise = dropWhile (<from) -- repeat beginning may lower `from`
+                                           $ takeWhile (<=to)
                                            $ map (read.concat.(replicate times).show) [n..]
                                           -- $ [nn,nn+step..]
-                                          -- increment the repeated part from the beginning of `min`
- where ms = show min
+                                          -- increment the repeated part from the beginning of `from`
+ where ms = show from
        l = length ms
-       ns = take (l`div`times) ms -- the beginning of `min`, which repeated is a lower bound
+       ns = take (l`div`times) ms -- the beginning of `from`, which repeated is a lower bound
        n = read ns :: Integer
        -- ALT: this saves many `read`s and `show`s,
        --       but finds false positives when ranges go over different digit lengths
