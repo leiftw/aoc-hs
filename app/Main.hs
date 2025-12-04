@@ -62,7 +62,7 @@ silliesInRange times (from,to) | (l`mod`times/=0) = silliesInRange times (intenn
        n = read ns :: Integer
        -- ALT: this saves many `read`s and `show`s,
        --       but finds false positives when ranges go over different digit lengths
-       --nn = read (replicate times ns)
+       --nn = read (concat $ replicate times ns)
        --step = intenner (l`div`times) + 1
 
 maxJoltage :: [Int] -> Int
