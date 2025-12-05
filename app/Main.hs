@@ -1,7 +1,7 @@
 module Main (main) where
 
 import Data.Char (isDigit)
-import Data.List (nub)
+import Data.List (nub, unfoldr)
 
 import Text.ParserCombinators.ReadP
 
@@ -27,7 +27,8 @@ main = do
          print $ map (maxJoltages 3) joltages
          input4 <- readFile "input4.txt"
          let charbits = map (map roll_bit) $ lines input4
-         print $ forklift charbits
+         print $ fst $ forklift charbits
+         print $ sum $ unfoldr forkliftOrNothing charbits
 
 -- hacky parser, runs faster than a `ReadP`
 parseRot :: String -> Int
@@ -102,4 +103,10 @@ neighborify charbits = tail $ init $ map (tail . init . padLeft ' ' padLength . 
 forklift :: [[Char]] -> (Int,[[Char]])
 forklift charbits = (length $ filter (\(b,n) -> b=='1' && n<'4') $ concat zipped
                     ,map (map (\(b,n) -> head $ show $ fromEnum $ b=='1' && n>='4')) zipped)
+ where zipped = zipWith (zip) charbits (neighborify charbits)
+
+forkliftOrNothing :: [[Char]] -> Maybe (Int,[[Char]])
+forkliftOrNothing charbits = if any (\(b,n) -> b=='1' && n<'4') $ concat zipped
+                             then Just (forklift charbits)
+                             else Nothing
  where zipped = zipWith (zip) charbits (neighborify charbits)
