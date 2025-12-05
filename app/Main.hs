@@ -97,8 +97,8 @@ roll_bit '.' = '0'
 neighborify :: [[Char]] -> [[Char]]
 neighborify charbits = tail $ init $ map (tail . init . padLeft ' ' padLength . show) neighbor_decbits
  where decbits = map read charbits :: [Integer]
-       neighbor_decbits = convoluteWith3 [111,101,111] decbits
-       padLength = 2 + maximum (map length charbits)
+       neighbor_decbits = convoluteWith3 [111,101,111] decbits -- adds 1 to every neighboring digit
+       padLength = 2 + maximum (map length charbits) -- 2 extra because the neighbor digits spill over
 
 forklift :: [[Char]] -> (Int,[[Char]])
 forklift charbits = (length $ filter (\(b,n) -> b=='1' && n<'4') $ concat zipped

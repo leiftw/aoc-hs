@@ -13,10 +13,11 @@ intenner i = read ('1':replicate i '0') -- `10^^l` is a `Fractional`
 
 -- TODO: generalize?
 convoluteWith3 :: [Integer] -> [Integer] -> [Integer]
-convoluteWith3 [up,he,dn] xs = zipWith3 ((+) .|. (+)) (map (*up) xs ++ [0,0])
+convoluteWith3 [up,he,dn] xs = zipWith3 ((+) .|. (+)) (map (*up) xs ++ [0,0]) -- TODO: inelegant `++`
                                                       (map (*he) (0:xs ++ [0]))
                                                       (map (*dn) (0:0:xs))
 
+-- TODO: find in some library?
 padLeft :: Char -> Int -> String -> String
 padLeft c l str = replicate (l - length str) c ++ str
 
