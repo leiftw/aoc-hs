@@ -27,12 +27,7 @@ main = do
          print $ map (maxJoltages 3) joltages
          input4 <- readFile "input4.txt"
          let charbits = map (map roll_bit) $ lines input4
-         let decbits = map read charbits :: [Integer]
-         let neighbor_decbits = convoluteWith3 [111,101,111] decbits
-         let padLength = 2 + maximum (map length charbits)
-         let neighbor_digits_trimmed = tail $ init $ 
-                                  map (tail . init . padLeft ' ' padLength . show) neighbor_decbits
-         let zipped = zipWith (zip) charbits neighbor_digits_trimmed
+         let zipped = zipWith (zip) charbits (neighborify charbits)
          print $ length $ filter (\(b,n) -> b=='1' && n<'4') $ concat zipped
 
 -- hacky parser, runs faster than a `ReadP`
@@ -98,3 +93,9 @@ maxJoltages' _ js [] = sum $ zipWith (\i j -> toInteger j * intenner i) [0..] $ 
 roll_bit :: Char -> Char
 roll_bit '@' = '1'
 roll_bit '.' = '0'
+
+neighborify :: [[Char]] -> [[Char]]
+neighborify charbits = tail $ init $ map (tail . init . padLeft ' ' padLength . show) neighbor_decbits
+ where decbits = map read charbits :: [Integer]
+       neighbor_decbits = convoluteWith3 [111,101,111] decbits
+       padLength = 2 + maximum (map length charbits)
