@@ -93,13 +93,13 @@ maxJoltages :: Int -> [Int] -> Integer
 maxJoltages k l = maxJoltages' k (replicate k 0) l
 
 maxJoltages' :: Int -> [Int] -> [Int] -> Integer
-maxJoltages' k js l@(a:r) = maxJoltages' k
-                            (take k $ safes ++ staying ++ l)
-                            (drop (max 1 $ length displaced) l) -- start with l where it starts to increase the number
- where (safes,unsafes) = splitAt (k - length l) js
-     -- safe not because high enough but because there aren't enough batteries left to displace them
-       (staying,displaced) = span (>=a) unsafes
 maxJoltages' _ js [] = sum $ zipWith (\i j -> toInteger j * intenner i) [0..] $ reverse js
+-- take one digit in at a time, and kick out the first digit lower than the next
+maxJoltages' k js (a:r) = maxJoltages' k (kickOutFirstLowerThanNext $ js++[a]) r
+ where kickOutFirstLowerThanNext (x:xs@(y:_)) | x < y     = xs
+                                              | otherwise = x : kickOutFirstLowerThanNext xs
+       kickOutFirstLowerThanNext xs = tail xs -- all nonincreasing, kick out the smallest (first)
+
 
 -- DAY 4
 
