@@ -43,6 +43,13 @@ matchWithSorted f (t:ts) (x:xs) = case f t x of
                                        LT -> matchWithSorted f ts (x:xs) -- skip too low target
                                        GT -> matchWithSorted f (t:ts) xs -- skip too low shot
 
+-- could require `Num` or `Enum` to merge adjacent ranges with `b+1` or `succ b`
+mergeRanges :: (Ord o) => [(o,o)] -> [(o,o)]
+mergeRanges [] = []
+mergeRanges [r] = [r]
+mergeRanges ((a,b):(c,d):rs) | b >= c    = mergeRanges ((a,max b d):rs)
+                             | otherwise = (a,b) : mergeRanges ((c,d):rs)
+
 parseInteger :: ReadP Integer
 parseInteger = read <$> munch1 isDigit
 

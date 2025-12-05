@@ -34,6 +34,7 @@ main = do
          let idranges = map (fromJust . tryParser parseRange) input5rs
          let ids = map read $ tail input5ids
          print $ length $ matchWithSorted orderRange (sort idranges) (sort ids)
+         print $ sum $ map (\(a,b) -> 1+b-a) $ mergeRanges (sort idranges)
 
 -- hacky parser, runs faster than a `ReadP`
 parseRot :: String -> Int
