@@ -1,7 +1,8 @@
 module Main (main) where
 
 import Data.Char (isDigit)
-import Data.List (nub, unfoldr)
+import Data.List (nub, unfoldr, sort)
+import Data.Maybe (fromJust)
 
 import Text.ParserCombinators.ReadP
 
@@ -29,6 +30,11 @@ main = do
          let charbits = map (map roll_bit) $ lines input4
          print $ fst $ forklift charbits
          print $ sum $ unfoldr forkliftOrNothing charbits
+         input5 <- readFile "input5.txt"
+         let (input5rs,input5ids) = span (/="") $ lines input5
+         let idranges = map (fromJust . tryParser parseRange) input5rs
+         let ids = map read $ tail input5ids
+         print $ length $ matchWithSorted orderRange (sort idranges) (sort ids)
 
 -- hacky parser, runs faster than a `ReadP`
 parseRot :: String -> Int

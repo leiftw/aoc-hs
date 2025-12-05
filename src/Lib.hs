@@ -21,6 +21,24 @@ convoluteWith3 [up,he,dn] xs = zipWith3 ((+) .|. (+)) (map (*up) xs ++ [0,0]) --
 padLeft :: Char -> Int -> String -> String
 padLeft c l str = replicate (l - length str) c ++ str
 
+-- can't really be used in `silliesInRange` but probably elsewhere
+inRange :: (Ord o) => (o,o) -> o -> Bool
+inRange (from,to) x = (from <= x) && (x <= to)
+
+-- variant using `Ordering` a bit freely
+orderRange :: (Ord o) => (o,o) -> o -> Ordering
+orderRange (from,to) x | x < from = GT -- unintuitive, but follows the order of `compare`
+                       | x > to   = LT
+                       | otherwise = EQ
+
+matchWithSorted :: (a -> b -> Ordering) -> [a] -> [b] -> [b]
+matchWithSorted _ [] _ = []
+matchWithSorted _ _ [] = []
+matchWithSorted f (t:ts) (x:xs) = case f t x of
+                                       EQ -> x : matchWithSorted f (t:ts) xs -- record a match and move on to the next shot
+                                       LT -> matchWithSorted f ts (x:xs) -- skip too low target
+                                       GT -> matchWithSorted f (t:ts) xs -- skip too low shot
+
 -- from `Utils.ReadPMaybe`
 tryParser :: ReadP a -> String -> Maybe a
 tryParser = fmap fst . listToMaybe . reverse .|. readP_to_S
