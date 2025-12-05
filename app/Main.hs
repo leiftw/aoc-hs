@@ -98,7 +98,7 @@ maxJoltages' _ js [] = sum $ zipWith (\i j -> toInteger j * intenner i) [0..] $ 
 maxJoltages' k js (a:r) = maxJoltages' k (kickOutFirstLowerThanNext $ js++[a]) r
  where kickOutFirstLowerThanNext (x:xs@(y:_)) | x < y     = xs
                                               | otherwise = x : kickOutFirstLowerThanNext xs
-       kickOutFirstLowerThanNext xs = tail xs -- all nonincreasing, kick out the smallest (first)
+       kickOutFirstLowerThanNext [x] = [] -- by default, kick out last (not take in new digit)
 
 
 -- DAY 4
