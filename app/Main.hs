@@ -106,7 +106,9 @@ forklift charbits = (length $ filter (\(b,n) -> b=='1' && n<'4') $ concat zipped
  where zipped = zipWith (zip) charbits (neighborify charbits)
 
 forkliftOrNothing :: [[Char]] -> Maybe (Int,[[Char]])
-forkliftOrNothing charbits = if any (\(b,n) -> b=='1' && n<'4') $ concat zipped
-                             then Just (forklift charbits)
-                             else Nothing
- where zipped = zipWith (zip) charbits (neighborify charbits)
+forkliftOrNothing charbits = case forklift charbits do
+                              (0,_) -> Nothing
+                              res   -> Just res
+-- ALT: could check for `any` removable rolls first,
+--       requiring `neighborify` and all the `zip`ping twice if some are removed but
+--       avoiding computing characters when none are removed
