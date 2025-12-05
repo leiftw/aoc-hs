@@ -27,8 +27,7 @@ main = do
          print $ map (maxJoltages 3) joltages
          input4 <- readFile "input4.txt"
          let charbits = map (map roll_bit) $ lines input4
-         let zipped = zipWith (zip) charbits (neighborify charbits)
-         print $ length $ filter (\(b,n) -> b=='1' && n<'4') $ concat zipped
+         print $ forklift charbits
 
 -- hacky parser, runs faster than a `ReadP`
 parseRot :: String -> Int
@@ -99,3 +98,8 @@ neighborify charbits = tail $ init $ map (tail . init . padLeft ' ' padLength . 
  where decbits = map read charbits :: [Integer]
        neighbor_decbits = convoluteWith3 [111,101,111] decbits
        padLength = 2 + maximum (map length charbits)
+
+forklift :: [[Char]] -> (Int,[[Char]])
+forklift charbits = (length $ filter (\(b,n) -> b=='1' && n<'4') $ concat zipped
+                    ,map (map (\(b,n) -> head $ show $ fromEnum $ b=='1' && n>='4')) zipped)
+ where zipped = zipWith (zip) charbits (neighborify charbits)
