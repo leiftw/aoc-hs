@@ -25,7 +25,8 @@ main = do
          input3 <- readFile "input3x.txt"
          let joltages = map (map (\c -> fromEnum c - fromEnum '0')) $ lines input3
                                     -- `fromEnum` trick faster than `read [c]`?
-         print $ map (maxJoltages 3) joltages
+         print $ map (maxJoltages 2) joltages
+         print $ map (maxJoltages 3) joltages--12
          input4 <- readFile "input4.txt"
          let charbits = map (map roll_bit) $ lines input4
          print $ fst $ forklift charbits
