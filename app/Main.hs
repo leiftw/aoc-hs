@@ -25,6 +25,15 @@ main = do
          let joltages = map (map (\c -> fromEnum c - fromEnum '0')) $ lines input3
                                     -- `fromEnum` trick faster than `read [c]`?
          print $ map (maxJoltages 3) joltages
+         input4 <- readFile "input4.txt"
+         let charbits = map (map roll_bit) $ lines input4
+         let decbits = map read charbits :: [Integer]
+         let neighbor_decbits = convoluteWith3 [111,101,111] decbits
+         let padLength = 2 + maximum (map length charbits)
+         let neighbor_digits_trimmed = tail $ init $ 
+                                  map (tail . init . padLeft ' ' padLength . show) neighbor_decbits
+         let zipped = zipWith (zip) charbits neighbor_digits_trimmed
+         print $ length $ filter (\(b,n) -> b=='1' && n<'4') $ concat zipped
 
 -- hacky parser, runs faster than a `ReadP`
 parseRot :: String -> Int
@@ -85,3 +94,7 @@ maxJoltages' k js l@(a:r) = maxJoltages' k (take k $ safes ++ takeWhile (>=a) un
  where (safes,unsafes) = splitAt (k - length l) js
      -- safe not because high enough but because there aren't enough batteries left to displace them
 maxJoltages' _ js [] = sum $ zipWith (\i j -> toInteger j * intenner i) [0..] $ reverse js
+
+roll_bit :: Char -> Char
+roll_bit '@' = '1'
+roll_bit '.' = '0'
