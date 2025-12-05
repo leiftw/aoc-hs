@@ -32,11 +32,14 @@ orderRange (from,to) x | x < from = GT -- unintuitive, but follows the order of 
                        | x > to   = LT
                        | otherwise = EQ
 
+-- `matchWith` would take unsorted input, but sorting them is nlogn while checking any pair is nn
+-- "match" could be misleading, here targets can be matched multiple times
 matchWithSorted :: (a -> b -> Ordering) -> [a] -> [b] -> [b]
 matchWithSorted _ [] _ = []
 matchWithSorted _ _ [] = []
 matchWithSorted f (t:ts) (x:xs) = case f t x of
-                                       EQ -> x : matchWithSorted f (t:ts) xs -- record a match and move on to the next shot
+                                       EQ -> x : matchWithSorted f (t:ts) xs
+                                          -- record a match and move on to the next shot
                                        LT -> matchWithSorted f ts (x:xs) -- skip too low target
                                        GT -> matchWithSorted f (t:ts) xs -- skip too low shot
 
