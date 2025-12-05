@@ -7,6 +7,7 @@ import Text.ParserCombinators.ReadP
 
 import Lib
 
+
 main :: IO ()
 main = do
          input1 <- readFile "input1.txt"
@@ -36,6 +37,8 @@ main = do
          print $ length $ matchWithSorted orderRange (sort idranges) (sort ids)
          print $ sum $ map (\(a,b) -> 1+b-a) $ mergeRanges (sort idranges)
 
+-- DAY 1
+
 -- hacky parser, runs faster than a `ReadP`
 parseRot :: String -> Int
 parseRot ('L':r) = 0 - read r
@@ -51,6 +54,8 @@ hits old rot = abs (rot`quot`100) -- how many whole turns
                                  --  which is whether 0 or 100 is crossed;
                                  -- `mod` on `rot` would overcount when going down from a high point,
                                  --  misrepresenting it as going further up over 100
+
+-- DAY 2
 
 silliesInRange :: Int -> (Integer,Integer) -> [Integer]
 silliesInRange times (from,to) | (l`mod`times/=0) = silliesInRange times (intenner l,to)
@@ -68,6 +73,8 @@ silliesInRange times (from,to) | (l`mod`times/=0) = silliesInRange times (intenn
        --       but finds false positives when ranges go over different digit lengths
        --nn = read (concat $ replicate times ns)
        --step = intenner (l`div`times) + 1
+
+-- DAY 3
 
 maxJoltage :: [Int] -> Int
 maxJoltage l = maxJoltage' (0,0) l
@@ -89,6 +96,8 @@ maxJoltages' k js l@(a:r) = maxJoltages' k (take k $ safes ++ takeWhile (>=a) un
  where (safes,unsafes) = splitAt (k - length l) js
      -- safe not because high enough but because there aren't enough batteries left to displace them
 maxJoltages' _ js [] = sum $ zipWith (\i j -> toInteger j * intenner i) [0..] $ reverse js
+
+-- DAY 4
 
 roll_bit :: Char -> Char
 roll_bit '@' = '1'

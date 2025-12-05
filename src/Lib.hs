@@ -5,6 +5,7 @@ import Data.Maybe (listToMaybe)
 
 import Text.ParserCombinators.ReadP
 
+
 -- TODO: unintuitive order, either postpend or `foldr` with initial `reverse`?
 accum :: Foldable fo => (b -> a -> b) -> b -> fo a -> [b]
 accum f i as = snd $ foldl' (\(c,ras) a -> (f c a,(f c a):ras)) (i,[]) as
@@ -49,6 +50,7 @@ mergeRanges [] = []
 mergeRanges [r] = [r]
 mergeRanges ((a,b):(c,d):rs) | b >= c    = mergeRanges ((a,max b d):rs)
                              | otherwise = (a,b) : mergeRanges ((c,d):rs)
+
 
 parseInteger :: ReadP Integer
 parseInteger = read <$> munch1 isDigit
