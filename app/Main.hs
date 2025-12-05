@@ -1,6 +1,5 @@
 module Main (main) where
 
-import Data.Char (isDigit)
 import Data.List (nub, unfoldr, sort)
 import Data.Maybe (fromJust)
 
@@ -51,12 +50,6 @@ hits old rot = abs (rot`quot`100) -- how many whole turns
                                  --  which is whether 0 or 100 is crossed;
                                  -- `mod` on `rot` would overcount when going down from a high point,
                                  --  misrepresenting it as going further up over 100
-
-parseInteger :: ReadP Integer
-parseInteger = read <$> munch1 isDigit
-
-parseRange :: ReadP (Integer,Integer)
-parseRange = (,) <$> parseInteger <*> (char '-' >> parseInteger)
 
 silliesInRange :: Int -> (Integer,Integer) -> [Integer]
 silliesInRange times (from,to) | (l`mod`times/=0) = silliesInRange times (intenner l,to)

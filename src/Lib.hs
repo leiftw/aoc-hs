@@ -1,5 +1,6 @@
 module Lib where
 
+import Data.Char (isDigit)
 import Data.Maybe (listToMaybe)
 
 import Text.ParserCombinators.ReadP
@@ -38,6 +39,12 @@ matchWithSorted f (t:ts) (x:xs) = case f t x of
                                        EQ -> x : matchWithSorted f (t:ts) xs -- record a match and move on to the next shot
                                        LT -> matchWithSorted f ts (x:xs) -- skip too low target
                                        GT -> matchWithSorted f (t:ts) xs -- skip too low shot
+
+parseInteger :: ReadP Integer
+parseInteger = read <$> munch1 isDigit
+
+parseRange :: ReadP (Integer,Integer)
+parseRange = (,) <$> parseInteger <*> (char '-' >> parseInteger)
 
 -- from `Utils.ReadPMaybe`
 tryParser :: ReadP a -> String -> Maybe a
